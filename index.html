@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#090b18" />
+  <title>Hemanjali Paiboina | Portfolio</title>
+  <meta name="description" content="Hemanjali Paiboina — Computer Science and Engineering undergraduate graduating in 2027, with project experience in full-stack web development and sales data analysis." />
+  <style>
+    :root {
+      --bg: #080a16;
+      --panel: rgba(15, 18, 38, .72);
+      --line: rgba(190, 178, 255, .18);
+      --text: #f7f5ff;
+      --muted: #b8b6ce;
+      --purple: #b9a2ff;
+      --pink: #ff9fcf;
+      --cyan: #91e9ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      color: var(--text); background: var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    #scene {
+      position: fixed; inset: 0; z-index: -2; width: 100%; height: 100%;
+      display: block; background: linear-gradient(#151a3c, #f2a0b4 58%, #28264d);
+    }
+    .scene-shade {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background: linear-gradient(90deg, rgba(6,8,20,.86) 0%, rgba(6,8,20,.48) 48%, rgba(6,8,20,.16) 100%),
+                  linear-gradient(0deg, rgba(6,8,20,.94) 0%, transparent 54%, rgba(6,8,20,.2) 100%);
+    }
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px clamp(20px, 6vw, 84px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(8,10,22,.35); backdrop-filter: blur(18px);
+    }
+    .brand { font-weight: 800; letter-spacing: -.04em; font-size: 1.25rem; }
+    .brand span { color: var(--pink); }
+    .nav { display: flex; gap: clamp(14px, 3vw, 34px); align-items: center; }
+    .nav a { color: #e7e2ff; font-size: .88rem; transition: color .2s; }
+    .nav a:hover { color: var(--pink); }
+    .nav .nav-cta { border: 1px solid #d8c8ff66; border-radius: 999px; padding: 10px 16px; }
+    .menu-btn { display: none; border: 1px solid var(--line); color: white; background: #15152a; border-radius: 10px; padding: 8px 12px; }
+    .hero {
+      min-height: 100svh; display: flex; align-items: center;
+      padding: 150px clamp(22px, 10vw, 150px) 100px; position: relative;
+    }
+    .hero-copy { max-width: 740px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px;
+      background: rgba(14,15,34,.46); color: #e6dfff; font-size: .78rem;
+      letter-spacing: .12em; text-transform: uppercase; margin-bottom: 26px;
+    }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #9dffcf; box-shadow: 0 0 15px #9dffcf; }
+    h1 { font-size: clamp(3.2rem, 8.3vw, 7.8rem); line-height: .94; letter-spacing: -.075em; font-weight: 850; }
+    h1 .gradient {
+      background: linear-gradient(100deg, #fff 8%, #d7c9ff 42%, #ffadd4 75%, #a5efff);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p { max-width: 590px; margin-top: 28px; color: #e1ddf3; line-height: 1.8; font-size: clamp(1rem, 1.5vw, 1.14rem); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 34px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 14px 20px; border-radius: 999px; border: 1px solid #ffffff30;
+      background: rgba(19,18,44,.68); color: white; font-weight: 650; font-size: .92rem;
+      transition: transform .2s, box-shadow .2s, background .2s;
+    }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 32px #0b061f66; }
+    .btn.primary { background: linear-gradient(110deg, #8c6dff, #e783c0); border: 0; color: #111022; }
+    .scroll-note { position: absolute; bottom: 32px; left: clamp(22px, 10vw, 150px); color: #ded7f5; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; display: flex; align-items: center; gap: 12px; }
+    .scroll-note::before { content: ""; width: 38px; height: 1px; background: #f2c5e6; }
+    .section { padding: 110px clamp(22px, 10vw, 150px); position: relative; }
+    .section-inner { max-width: 1120px; margin: auto; }
+    .section-label { color: var(--pink); text-transform: uppercase; letter-spacing: .2em; font-size: .76rem; font-weight: 750; margin-bottom: 15px; }
+    h2 { font-size: clamp(2.4rem, 5vw, 4.5rem); letter-spacing: -.065em; line-height: 1.04; margin-bottom: 22px; }
+    h2 span { color: var(--purple); }
+    .section-lead { max-width: 700px; color: var(--muted); line-height: 1.85; font-size: 1.02rem; }
+    .glass {
+      border: 1px solid var(--line); background: var(--panel); backdrop-filter: blur(18px);
+      box-shadow: 0 24px 90px rgba(0,0,0,.18); border-radius: 22px;
+    }
+    .about-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 24px; margin-top: 40px; }
+    .about-card { padding: clamp(24px, 4vw, 42px); }
+    .about-card h3 { font-size: 1.25rem; margin-bottom: 14px; }
+    .about-card p { color: var(--muted); line-height: 1.8; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stat { padding: 22px; border: 1px solid var(--line); border-radius: 17px; background: #17172d99; }
+    .stat strong { display: block; font-size: 1.6rem; color: var(--pink); margin-bottom: 7px; }
+    .stat span { font-size: .83rem; color: var(--muted); }
+    .skill-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 35px; }
+    .skill {
+      padding: 13px 17px; border-radius: 12px; color: #f1eaff; font-size: .9rem;
+      background: linear-gradient(135deg, #1b1b37cc, #251933cc);
+      border: 1px solid #c6b1ff30; box-shadow: inset 0 1px #ffffff0a;
+    }
+    .projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 38px; }
+    .project { overflow: hidden; transition: transform .25s, border-color .25s; }
+    .project:hover { transform: translateY(-7px); border-color: #ffacd566; }
+    .project-art { height: 175px; position: relative; overflow: hidden; background: linear-gradient(135deg,#2c275e,#f29cb9); }
+    .project-art::before, .project-art::after { content: ""; position: absolute; }
+    .project-art::before { inset: 0; background: repeating-linear-gradient(90deg, transparent 0 28px, #ffffff12 29px 30px), repeating-linear-gradient(0deg, transparent 0 28px, #ffffff12 29px 30px); transform: perspective(180px) rotateX(55deg) scale(1.8) translateY(30px); }
+    .project-art::after { width: 150px; height: 150px; border-radius: 50%; right: 28px; top: 10px; background: radial-gradient(circle at 35% 30%, #ffe2c6, #ff8dbd 50%, #845df5 75%); box-shadow: 0 0 50px #ff8dbd80; }
+    .project-art.art-two { background: linear-gradient(135deg,#102c53,#5a8dbd,#f4b0c8); }
+    .project-art.art-two::after { width: 95px; height: 180px; border-radius: 50% 50% 8px 8px; top: 28px; right: 54px; background: linear-gradient(90deg,#8fe8ff,#5368a8); transform: rotate(22deg); }
+    .project-art.art-three { background: linear-gradient(135deg,#361d50,#f29b88,#ffc5c9); }
+    .project-art.art-three::after { width: 160px; height: 100px; border-radius: 12px; top: 36px; right: 30px; background: linear-gradient(135deg,#ffdfb2,#a778ff); transform: rotate(-12deg); box-shadow: 12px 15px 0 #4b2d79; }
+    .project-body { padding: 23px; }
+    .project-body small { color: var(--pink); letter-spacing: .12em; text-transform: uppercase; font-size: .68rem; }
+    .project-body h3 { margin: 11px 0; font-size: 1.15rem; }
+    .project-body p { color: var(--muted); font-size: .88rem; line-height: 1.7; min-height: 72px; }
+    .project-links { display: flex; gap: 14px; margin-top: 18px; font-size: .83rem; color: #ded3ff; }
+    .project-links a:hover { color: var(--pink); }
+    .contact-box { padding: clamp(28px, 6vw, 65px); text-align: center; background: radial-gradient(ellipse at top, #3b285b99, transparent 68%), var(--panel); }
+    .contact-box .section-lead { margin: 0 auto; }
+    .contact-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    footer { border-top: 1px solid #ffffff15; padding: 28px 20px; text-align: center; color: #a9a5c0; font-size: .82rem; background: #080a16d9; }
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .hint { font-size: .78rem !important; color: #aaa3c6 !important; margin-top: 16px !important; }
+    @media (max-width: 850px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .projects { grid-template-columns: 1fr 1fr; }
+      .scene-shade { background: linear-gradient(90deg, rgba(6,8,20,.83), rgba(6,8,20,.34)), linear-gradient(0deg, #080a16 0%, transparent 75%); }
+    }
+    @media (max-width: 620px) {
+      .topbar { padding: 16px 20px; }
+      .menu-btn { display: block; }
+      .nav { display: none; position: absolute; top: 67px; right: 16px; flex-direction: column; align-items: stretch; gap: 0; min-width: 190px; padding: 10px; background: #101127f5; border: 1px solid var(--line); border-radius: 14px; }
+      .nav.open { display: flex; }
+      .nav a { padding: 12px; margin: 0; }
+      .nav .nav-cta { border: 0; }
+      .hero { padding-top: 140px; min-height: 95svh; }
+      .hero-copy { max-width: 100%; }
+      h1 { font-size: clamp(3.25rem, 15vw, 5rem); }
+      .hero p { font-size: .98rem; }
+      .projects { grid-template-columns: 1fr; }
+      .project-art { height: 190px; }
+      .section { padding-top: 78px; padding-bottom: 78px; }
+      .scroll-note { bottom: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="scene-shade" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#home">HEMANJALI<span>.</span></a>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation">Menu ☰</button>
+    <nav class="nav" id="nav">
+      <a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#education">Education</a>
+      <a class="nav-cta" href="#contact">Let's connect ↗</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span> Software Development • Data Analytics</div>
+        <h1>Building the<br><span class="gradient">next experience.</span></h1>
+        <p>Hey, I'm Hemanjali Paiboina, a B.Tech Computer Science and Engineering student at SRKR Engineering College, graduating in 2027. I enjoy building full-stack web applications, exploring data, and solving practical problems. I'm looking for internship and entry-level opportunities to learn, contribute, and grow.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#projects">Explore my work <span>↗</span></a>
+          <a class="btn" href="#contact">Let's talk <span>↗</span></a>
+        </div>
+        <p class="hint">Move your mouse to interact with the animated 3D-inspired scene.</p>
+      </div>
+      <div class="scroll-note">Scroll to explore</div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-inner reveal">
+        <div class="section-label">01 / A little about me</div>
+        <h2>Curiosity into<br><span>creation.</span></h2>
+        <p class="section-lead">I'm a Computer Science and Engineering undergraduate with interests in software development, frontend development, and data analytics. My projects include a full-stack food ordering website and a sales performance dashboard built with Advanced SQL and Tableau.</p>
+        <div class="about-grid">
+          <article class="glass about-card">
+            <h3>My approach</h3>
+            <p>I believe in learning by building. I enjoy breaking down problems, working with data, and creating useful web experiences. I'm open to internships and entry-level opportunities where I can learn from a team and contribute.</p>
+          </article>
+          <div class="stats">
+            <div class="stat"><strong>01</strong><span>Keep learning</span></div>
+            <div class="stat"><strong>∞</strong><span>Ideas to explore</span></div>
+            <div class="stat"><strong>Build</strong><span>Through practice</span></div>
+            <div class="stat"><strong>2027</strong><span>B.Tech graduation</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="section-inner reveal">
+        <div class="section-label">02 / My toolkit</div>
+        <h2>Skills I'm <span>growing.</span></h2>
+        <p class="section-lead">Technical skills listed in my resume. Proficiency varies by technology, and I continue to develop through practical projects.</p>
+        <div class="skill-list">
+          <span class="skill">Python</span><span class="skill">C</span><span class="skill">Java (Basic)</span>
+          <span class="skill">HTML</span><span class="skill">CSS</span><span class="skill">JavaScript</span>
+          <span class="skill">React.js</span><span class="skill">Node.js</span><span class="skill">Express.js</span>
+          <span class="skill">SQL</span><span class="skill">MySQL</span><span class="skill">MongoDB</span>
+          <span class="skill">DBMS</span><span class="skill">Git</span><span class="skill">GitHub</span>
+          <span class="skill">VS Code</span><span class="skill">OOP</span><span class="skill">Tableau</span>
+          <span class="skill">ETL & Data Preparation</span><span class="skill">Exploratory Data Analysis</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="section-inner reveal">
+        <div class="section-label">03 / Selected work</div>
+        <h2>Ideas made <span>real.</span></h2>
+        <p class="section-lead">Selected projects from my resume. Project links point to your GitHub profile until individual repository URLs are available.</p>
+        <div class="projects">
+          <article class="glass project">
+            <div class="project-art"></div>
+            <div class="project-body"><small>Full-stack web development</small><h3>Lavish Bites</h3><p>A food ordering website for browsing snacks, pizzas, burgers, milkshakes, and ice creams. Includes responsive category/product pages, cart management, and order placement. Built with HTML, CSS, JavaScript, Node.js, Express.js, and MongoDB.</p><div class="project-links"><a href="https://github.com/hemanjali1805" target="_blank" rel="noreferrer">GitHub ↗</a><a href="#contact">Contact ↗</a></div></div>
+          </article>
+          <article class="glass project">
+            <div class="project-art art-two"></div>
+            <div class="project-body"><small>Data analytics • SQL • Tableau</small><h3>Sales Performance & Revenue Optimization Dashboard</h3><p>Prepared multi-year sales data, used advanced SQL and exploratory analysis to identify trends, and designed an interactive Tableau dashboard for revenue and business metrics.</p><div class="project-links"><a href="https://github.com/hemanjali1805" target="_blank" rel="noreferrer">GitHub ↗</a><a href="#contact">Contact ↗</a></div></div>
+          </article>
+          <article class="glass project">
+            <div class="project-art art-three"></div>
+            <div class="project-body"><small>Certification & strengths</small><h3>HACKSPRINT 2025</h3><p>Participated in the 24-hour HACKSPRINT hackathon at Utkarsh 2025, Swarnandhra College of Engineering and Technology. Strengths include problem-solving, teamwork, adaptability, and attention to detail.</p><div class="project-links"><a href="#education">Education & more ↗</a><a href="#contact">Contact ↗</a></div></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="education">
+      <div class="section-inner reveal">
+        <div class="section-label">04 / Education & more</div>
+        <h2>My learning <span>journey.</span></h2>
+        <div class="about-grid">
+          <article class="glass about-card">
+            <h3>SRKR Engineering College</h3>
+            <p>B.Tech — Computer Science and Engineering<br>2023–2027 · CGPA: 7.42</p><br>
+            <h3>Tirumala Junior College</h3>
+            <p>Intermediate (10+2) · 90.3%<br>2020–2023</p><br>
+            <h3>Indian English Medium High School</h3>
+            <p>10th standard · 98%<br>2019–2020</p>
+          </article>
+          <article class="glass about-card">
+            <h3>Strengths</h3>
+            <p>Problem-solving · Teamwork · Adaptability · Attention to detail</p><br>
+            <h3>Certification & participation</h3>
+            <p>HACKSPRINT — 24-hour hackathon<br>Utkarsh 2025, Swarnandhra College of Engineering and Technology · September 2025</p><br>
+            <h3>Career interests</h3>
+            <p>Entry-level opportunities in software development, frontend development, and data analytics.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="section-inner reveal">
+        <div class="glass contact-box">
+          <div class="section-label">05 / Say hello</div>
+          <h2>Have an idea?<br><span>Let's build it.</span></h2>
+          <p class="section-lead">I'm excited to connect with people, learn from new challenges, and explore internship or entry-level opportunities.</p>
+          <div class="contact-actions">
+            <!-- Replace the email and profile links below with your real details. -->
+            <a class="btn primary" href="mailto:hemanjaipaiboina0718@gmail.com">Email me ↗</a>
+            <a class="btn" href="https://www.linkedin.com/in/hemanjali-paiboina" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+            <a class="btn" href="https://github.com/hemanjali1805" target="_blank" rel="noreferrer">GitHub ↗</a>
+          </div>
+          <p class="hint">Email: hemanjaipaiboina0718@gmail.com · LinkedIn and GitHub profiles are connected.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>© <span id="year"></span> Hemanjali Paiboina. Designed with curiosity and a little stardust.</footer>
+
+  <script>
+    // Mobile navigation
+    const menuBtn = document.getElementById('menuBtn');
+    const nav = document.getElementById('nav');
+    menuBtn.addEventListener('click', () => nav.classList.toggle('open'));
+    nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => nav.classList.remove('open')));
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Reveal sections as they enter the viewport
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Animated, lightweight canvas scene: sunset sky, glowing sun, parallax stars,
+    // distant mountains and a neon perspective grid. No libraries or build tools needed.
+    const canvas = document.getElementById('scene');
+    const ctx = canvas.getContext('2d');
+    let w = 0, h = 0, dpr = 1, mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+    let stars = [];
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = Math.floor(w * dpr); canvas.height = Math.floor(h * dpr);
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      stars = Array.from({ length: Math.max(60, Math.floor(w / 12)) }, () => ({
+        x: Math.random() * w, y: Math.random() * h * .62,
+        r: Math.random() * 1.4 + .25, a: Math.random() * .6 + .2,
+        p: Math.random() * Math.PI * 2
+      }));
+    }
+    function mountain(points, color) {
+      ctx.beginPath(); ctx.moveTo(points[0][0], h);
+      points.forEach(p => ctx.lineTo(p[0], p[1]));
+      ctx.lineTo(w, h); ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+    }
+    function draw(t) {
+      const time = t * .0002;
+      mouseX += (targetX - mouseX) * .025;
+      mouseY += (targetY - mouseY) * .025;
+      const sky = ctx.createLinearGradient(0, 0, 0, h);
+      sky.addColorStop(0, '#111633'); sky.addColorStop(.42, '#65456f');
+      sky.addColorStop(.68, '#ed9aaa'); sky.addColorStop(1, '#252447');
+      ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
+
+      // stars
+      stars.forEach(s => {
+        const twinkle = .55 + Math.sin(time * 8 + s.p) * .35;
+        ctx.globalAlpha = s.a * twinkle;
+        ctx.fillStyle = '#fff3fa';
+        ctx.beginPath(); ctx.arc(s.x + mouseX * .018, s.y + mouseY * .015, s.r, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+
+      // glowing sunset
+      const sx = w * (.72 + mouseX * .00005), sy = h * .39 + Math.sin(time * 2) * 5;
+      const glow = ctx.createRadialGradient(sx, sy, 3, sx, sy, Math.min(w, h) * .31);
+      glow.addColorStop(0, 'rgba(255,224,207,.92)'); glow.addColorStop(.18, 'rgba(255,163,189,.42)');
+      glow.addColorStop(1, 'rgba(255,139,192,0)');
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#ffd8d6'; ctx.beginPath(); ctx.arc(sx, sy, Math.min(w, h) * .09, 0, Math.PI * 2); ctx.fill();
+
+      // layered angular mountain / city silhouettes
+      const shift = mouseX * .035;
+      mountain([[0,h*.57],[w*.10,h*.45],[w*.20,h*.54],[w*.31,h*.42],[w*.42,h*.56],[w*.55,h*.46],[w*.69,h*.57],[w*.83,h*.44],[w,h*.55]], '#4c3b67');
+      mountain([[0,h*.68],[w*.12,h*.56],[w*.24,h*.65],[w*.37,h*.53],[w*.48,h*.68],[w*.62,h*.55],[w*.78,h*.67],[w*.9,h*.55],[w,h*.64]], '#2a294d');
+      // Stylized glowing city blocks
+      const baseY = h * .73;
+      for (let i = 0; i < 34; i++) {
+        const bw = 12 + ((i * 17) % 29), bh = h * (.04 + ((i * 13) % 18) / 100);
+        const x = (i / 34) * w - 10 + shift * (i % 3 + 1);
+        const y = baseY - bh;
+        ctx.fillStyle = i % 3 === 0 ? '#282443' : '#1b203d';
+        ctx.fillRect(x, y, bw, bh + h * .1);
+        ctx.strokeStyle = i % 2 ? 'rgba(255,177,211,.48)' : 'rgba(145,233,255,.35)';
+        ctx.lineWidth = 1;
+        for (let wy = y + 8; wy < baseY; wy += 10) {
+          for (let wx = x + 4; wx < x + bw - 2; wx += 8) {
+            ctx.fillStyle = ((Math.floor(wx + wy + i) % 4) === 0) ? '#ffd0df' : '#77d9f5';
+            ctx.globalAlpha = .5 + .3 * Math.sin(time * 8 + wx);
+            ctx.fillRect(wx, wy, 2, 3);
+          }
+        }
+        ctx.globalAlpha = 1;
+      }
+      // neon perspective grid floor
+      const horizon = h * .72;
+      const floor = ctx.createLinearGradient(0, horizon, 0, h);
+      floor.addColorStop(0, '#242044'); floor.addColorStop(1, '#090c20');
+      ctx.fillStyle = floor; ctx.fillRect(0, horizon, w, h - horizon);
+      ctx.save();
+      ctx.beginPath(); ctx.rect(0, horizon, w, h - horizon); ctx.clip();
+      ctx.strokeStyle = 'rgba(255,145,202,.3)'; ctx.lineWidth = 1;
+      for (let i = -18; i <= 18; i++) {
+        ctx.beginPath(); ctx.moveTo(w / 2 + i * 7 + mouseX * .1, horizon);
+        ctx.lineTo(w / 2 + i * w * .09 + mouseX * .5, h); ctx.stroke();
+      }
+      for (let i = 1; i < 17; i++) {
+        const p = i / 17, y = horizon + (h - horizon) * p * p;
+        ctx.globalAlpha = .15 + p * .32;
+        ctx.beginPath(); ctx.moveTo(0, y + Math.sin(time * 4 + i) * 2); ctx.lineTo(w, y); ctx.stroke();
+      }
+      ctx.restore(); ctx.globalAlpha = 1;
+
+      // subtle foreground vignette
+      const vignette = ctx.createRadialGradient(w*.5,h*.42,Math.min(w,h)*.15,w*.5,h*.42,Math.max(w,h)*.75);
+      vignette.addColorStop(0,'rgba(0,0,0,0)'); vignette.addColorStop(1,'rgba(3,4,16,.48)');
+      ctx.fillStyle = vignette; ctx.fillRect(0,0,w,h);
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize', resize);
+    window.addEventListener('pointermove', e => {
+      targetX = e.clientX - w / 2; targetY = e.clientY - h / 2;
+    }, { passive: true });
+    resize(); requestAnimationFrame(draw);
+  </script>
+</body>
+</html>
